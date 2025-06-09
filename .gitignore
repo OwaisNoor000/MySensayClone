@@ -1,0 +1,5 @@
+.env
+venv
+
+/rag/engines/__pycache__
+/rag/readers/__pycache__

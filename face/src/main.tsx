@@ -3,25 +3,21 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import * as React from 'react';
 import Main from "./pages/Main";
 import ReactDOM from 'react-dom/client';
-import AppDataProvider from './contexts/AppDataProvider';
+import AppDataProvider, { AppContext } from './contexts/AppDataProvider';
 import InputBar from './components/InputBar';
 import Header from './components/Header';
 import Message from './components/Message';
 import Response from './components/Response';
+import MessageBoard from './components/MessageBoard';
+import { useEffect, useState } from 'react';
 
 
 function App() {
-  
+
   return(
         <div >
             <Header/>
-            <div style={{height:"70vh",overflow:"scroll",marginTop:"100px",scrollbarWidth:"none"}} 
-            className="flex flex-col items-center">
-                <Message text="Just testing to see if this works"/>
-                <Response text="Responding to the above text" />
-                <Message text="Just testing to see if this works"/>
-                <Response text="Responding to the above text" />
-            </div>
+            <MessageBoard/>
             <InputBar disableBtn={true}/>
         </div>
   )
@@ -31,7 +27,7 @@ function App() {
 ReactDOM.createRoot(document.getElementById('app')!).render(
       <React.StrictMode>
         <AppDataProvider>
-          <App />
+            <App />
         </AppDataProvider>
       </React.StrictMode>
 );

@@ -25,7 +25,7 @@ export default function Response({text,waiting}:Props){
             <div className="w-full text-white flex flex-row items-start my-5">
                     <img src={ProfilePicture} className="rounded-full mr-5" style={{height:"30px", width:"30px"}}/>
                     
-                    {waiting && text}
+                    {!waiting && text}
 
                     {waiting && <Loading/>}
             </div> 

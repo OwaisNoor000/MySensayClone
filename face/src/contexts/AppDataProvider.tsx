@@ -1,8 +1,14 @@
-import { createContext, useState, type Dispatch, type ReactNode } from "react";
+import { createContext, useState,useRef, type Dispatch, type ReactNode } from "react";
+
+export type Message = {
+  message:string,
+  response:boolean,
+  loading:boolean
+}
 
 export type AppData = {
   llmStatus:string,
-  messages:string[]
+  messages:Message[],
 }
 
 export interface AppContextInterface {
@@ -14,7 +20,7 @@ export interface AppContextInterface {
 const defaultState = {
   appData:{
     llmStatus:"normal",
-    messages:[]
+    messages:[],
   },
   setAppData:(appData:AppData) => {}
 } as AppContextInterface

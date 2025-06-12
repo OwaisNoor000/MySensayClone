@@ -3,3 +3,7 @@ venv
 
 /rag/engines/__pycache__
 /rag/readers/__pycache__
+
+test.py
+test.ipynb
+

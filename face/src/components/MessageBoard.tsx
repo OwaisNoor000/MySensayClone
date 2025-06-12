@@ -8,12 +8,12 @@ export default function MessageBoard(){
         const [inputText, setInputText] = useState("");
 
     return(
-        <div style={{height:"70vh",overflow:"scroll",marginTop:"100px",scrollbarWidth:"none"}} 
+        <div style={{height:"60vh",overflow:"scroll",marginTop:"100px",scrollbarWidth:"none"}} 
             className="flex flex-col items-center">
-                <Message text="Just testing to see if this works"/>
+                {/*<Message text="Just testing to see if this works"/>
                 <Response text="Responding to the above text" waiting={true} />
                 <Message text="Just testing to see if this works"/>
-                <Response text="Responding to the above text" />
+                <Response text="Responding to the above text" />*/}
                 {appData.messages.map((msg, index) =>
                 msg.response ? (
                 <Response key={index} text={msg.message} waiting={msg.loading} />

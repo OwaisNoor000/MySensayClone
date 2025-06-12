@@ -17,32 +17,74 @@ export default function({disableBtn}:Props) {
 
     const {appData,setAppData} = useContext(AppContext);
     const [inputText, setInputText] = useState("");
+    const messagesRef = useRef(appData.messages);
+    
+    useEffect(() => {
+    messagesRef.current = appData.messages;
+    }, [appData.messages]);
 
     useEffect(() => {
       socket.addEventListener("open",event=>{
         console.log("Connection established");
       });
 
+       
+
       socket.addEventListener("message", (event) => {
-            const newResponse = {
-              "message":event.data,
+            const parsed_message = JSON.parse(event.data);
+        
+
+            if(parsed_message.type === "message_segment"){
+              const currentMessages = messagesRef.current;
+              let lastResponse = currentMessages[currentMessages.length-1]
+              if (lastResponse === undefined){
+                console.log("lastResponse undefined");
+                console.log(appData.messages);
+                lastResponse = {
+                  "message":"",
+                  loading:false,
+                  response:true
+                }
+              }
+
+              // Add on the streamed text to the response
+              let newResponse = {
+              "message":lastResponse.message + parsed_message.text,
               "response":true,
               "loading":false
-            };
+              };
 
-            
-            setAppData(prev => {
-              const updatedMessages = [...prev.messages];
-              updatedMessages[updatedMessages.length - 1] = newResponse;
 
-              return {
+              if(lastResponse.loading){
+                newResponse = {
+                "message":parsed_message.text,
+                "response":true,
+                "loading":false
+                };
+              }
+              
+              
+              // Perform a replace operation
+                setAppData(prev => {
+                const updatedMessages = [...prev.messages];
+                updatedMessages[updatedMessages.length - 1] = newResponse;
+
+                return {
+                  ...prev,
+                  llmStatus: "generating",
+                  messages: updatedMessages,
+                };
+              });
+            }else if(parsed_message.type == "message_end"){
+              setAppData(prev => ({
                 ...prev,
                 llmStatus: "normal",
-                messages: updatedMessages,
-              };
-            });
+              }));
+
+            }
+
+            
           
-            console.log(event.data);
 
        });
 
@@ -69,7 +111,7 @@ export default function({disableBtn}:Props) {
                 messages: [...prev.messages, newMessage,newResponse],
             }));
             
-            setInputText("");
+setInputText("");
             
             socket.send(inputText);
 

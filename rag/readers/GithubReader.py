@@ -1,7 +1,8 @@
 import os
 import dotenv
 from llama_index.readers.github import GithubRepositoryReader,GithubClient
-from llama_index.core import VectorStoreIndex
+from llama_index.core import VectorStoreIndex,Settings
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 class GithubReader:
     def __init__(self,index_dir = "indexes/GithubIndex"):
@@ -12,13 +13,16 @@ class GithubReader:
         self.owner = "OwaisNoor000"
         self.documents = object
         self.index_dir = index_dir
+        self.repository = "MySensayClone"
+        Settings.embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
         
     def read_repo(self):
         print("reading Github repository")
         documents = GithubRepositoryReader(
             github_client=self.client,
             owner=self.owner,
-            repo="DutchEbookReaderMVP",
+            repo=self.repository,
             use_parser=False,
             verbose=False,
             filter_directories=(

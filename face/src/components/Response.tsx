@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import ProfilePicture from "../assets/pp.jpg";
 import { AppContext } from "../contexts/AppDataProvider";
+import ReactMarkdown from 'react-markdown';
+import Markdown from "react-markdown";
 
 type Props = {
     text:string;
@@ -22,12 +24,10 @@ export default function Response({text,waiting}:Props){
 
     return (
         <div className="w-1/2">
-            <div className="w-full text-white flex flex-row items-start my-5">
+            <div className="w-full text-white flex flex-col items-start my-5">
                     <img src={ProfilePicture} className="rounded-full mr-5" style={{height:"30px", width:"30px"}}/>
-                    
-                    {!waiting && text}
-
-                    {waiting && <Loading/>}
+                        {!waiting && <Markdown>{text}</Markdown>}
+                        {waiting && <Loading/>}
             </div> 
         </div>
     )

@@ -13,7 +13,15 @@ class GithubEngine:
         print("generating LLMs")
         storage_context = StorageContext.from_defaults(persist_dir=self.index_dir)
         index = load_index_from_storage(storage_context)
-        self.query_engine = index.as_query_engine()
+        self.query_engine = index.as_query_engine(streaming=True)
+
+    def _create_nonstreaming_engine(self):
+        print("generating LLMs")
+        storage_context = StorageContext.from_defaults(persist_dir=self.index_dir)
+        index = load_index_from_storage(storage_context)
+        return index.as_query_engine()
+
+
 
     def answer(self,question:str):
         print("Querying the LLM")

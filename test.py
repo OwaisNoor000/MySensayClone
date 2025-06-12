@@ -1,6 +1,6 @@
-from rag.engines.GithubEngine import GithubEngine
+from  supabasedb.MeetingRequestsDao import MeetingRequestsDao
+from supabasedb.MeetingRequests import MeetingRequests
 
-query_engine = GithubEngine()
-query_engine.create_engine()
-response = query_engine.answer("What does Batch.py do? and also, how many preprocessed pages does the book Jip&Janneke have?")
-print(response)
+dao = MeetingRequestsDao()
+meetingRequest = MeetingRequests("Testing12")
+#dao.create(meetingRequest)

@@ -1,5 +1,6 @@
 import { IoIosAttach } from "react-icons/io";
 import { FaArrowUp } from "react-icons/fa";
+import { MdOutlineMailOutline } from "react-icons/md";
 import { useContext, useEffect, useRef, useState} from "react";
 import AppDataProvider from "../contexts/AppDataProvider";
 import { AppContext} from "../contexts/AppDataProvider";
@@ -111,12 +112,46 @@ export default function({disableBtn}:Props) {
                 messages: [...prev.messages, newMessage,newResponse],
             }));
             
-setInputText("");
+            setInputText("");
             
             socket.send(inputText);
 
             };
         }
+        
+        const sendEmail = async()=>{
+          const res = await fetch("http://localhost:8000/email", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              // add authorization headers if needed
+            },
+            body: JSON.stringify({ emailContents: inputText }),
+          });
+
+          const newMessage = {
+                "message":inputText,
+                "response":false,
+                "loading":false
+          }
+
+          const newResponse = {
+                "message":"Email sent to Owais!",
+                "response":true,
+                "loading":false
+          }
+
+          setAppData(prev => ({
+                ...prev,
+                llmStatus: "normal",
+                messages: [...prev.messages, newMessage,newResponse],
+            }));
+
+          setInputText("");
+
+        }
+
+
 
 
     return(
@@ -126,7 +161,7 @@ setInputText("");
                 onKeyDown={(e)=>{if(e.key==="Enter" && appData.llmStatus=="normal"){sendMessage()}}}
                 className="placeholder-gray-300 py-4 px-6 outline-none focus:outline-none text-white w-full" type="text" placeholder="Ask Owais Anything"/>
                 <div className="w-full flex flex-row justify-start h-fit relative">
-                    <IoIosAttach className=" left-0 m-5 text-2xl"/>
+                    <MdOutlineMailOutline onClick={sendEmail} className=" left-0 m-5 text-2xl text-white"/>
                         <button
                             onClick={sendMessage}
                             disabled={appData.llmStatus === "generating"}
